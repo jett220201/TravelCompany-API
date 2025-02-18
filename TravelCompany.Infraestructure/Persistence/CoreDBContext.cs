@@ -23,7 +23,7 @@ namespace TravelCompany.Infraestructure.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.GetConnectionString("travelConnection");
+            string connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? _configuration.GetConnectionString("DefaultConnection");
             if (!string.IsNullOrEmpty(connectionString))
             {
                 optionsBuilder.UseSqlServer(connectionString);   

@@ -3,6 +3,7 @@ using TravelCompany.Application.Service;
 using TravelCompany.Infraestructure.Repository;
 using TravelCompany.Infraestructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace TravelCompanyAPI.Extensions
 {
@@ -28,7 +29,8 @@ namespace TravelCompanyAPI.Extensions
 
         public static void RegisterDataSource(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContextFactory<CoreDBContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("travelConnection")));
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? configuration.GetConnectionString("travelConnection");
+            services.AddDbContextFactory<CoreDBContext>(opt => opt.UseSqlServer(connectionString));
         }
     }
 }
