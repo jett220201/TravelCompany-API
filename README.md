@@ -1,7 +1,7 @@
 > [!TIP]
 > If you are working with Azure SQL and you can't connect
 > to the server you can check if the database status is *Paused*.
-> In that case you can resume with az sql db update --resource-group <group_name> --server <server_name> --name dbjett --set status=Online
+> In that case you can resume with az sql db update --resource-group <group_name> --server <server_name> --name dbname --set status=Online
 
 # TravelCompany-API 🏝️
 
