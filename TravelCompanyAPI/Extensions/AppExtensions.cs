@@ -30,7 +30,13 @@ namespace TravelCompanyAPI.Extensions
         public static void RegisterDataSource(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? configuration.GetConnectionString("travelConnection");
-            services.AddDbContextFactory<CoreDBContext>(opt => opt.UseSqlServer(connectionString));
+            services.AddDbContextFactory<CoreDBContext>(opt => opt.UseSqlServer(connectionString, sqlServerOptionsAction =>
+            {
+                sqlServerOptionsAction.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+            }));
         }
     }
 }
