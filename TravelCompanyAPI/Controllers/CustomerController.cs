@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using TravelCompany.Application.Service;
 using TravelCompany.Domain.Entities.DB;
 using TravelCompany.Application.Helper;
-using System.Globalization;
 using TravelCompany.Application.Contracts;
+using System.Globalization;
 using System.Text;
 
 namespace TravelCompanyAPI.Controllers
@@ -30,18 +31,25 @@ namespace TravelCompanyAPI.Controllers
         }
         
         [HttpGet("search")]
-        public async Task<JsonResult> SearchHotel(string checkIn, string checkOut, int guest, string city)
+        [SwaggerOperation(Summary = "Search for hotels", Description = "Search for hotels based on check-in and check-out dates, number of guests, and city.")]
+        [SwaggerResponse(200, "Returns a list of hotels", typeof(List<Hotel>))]
+        [SwaggerResponse(400, "Invalid input parameters")]
+        [SwaggerResponse(500, "Internal server error")]
+        public async Task<IActionResult> SearchHotel(string checkIn, string checkOut, int guest, string city)
         {
             try
             {
+                if(guest == 0) return BadRequest("Guests must be greater than 0.");
                 DateOnly checkInDate = DateOnly.Parse(checkIn, CultureInfo.InvariantCulture);
                 DateOnly checkOutDate = DateOnly.Parse(checkOut, CultureInfo.InvariantCulture);
+                if(checkInDate < DateOnly.FromDateTime(DateTime.Now)) return BadRequest("CheckIn date must be after today.");
+                else if(checkOutDate < checkInDate) return BadRequest("CheckOut date must be after CheckIn date.");
                 List<Hotel> hotels = await _hotelService.SearchHotels(checkInDate, checkOutDate, guest, city);
-                return Json(hotels);
+                return Ok(hotels);
             }
             catch (Exception ex)
             {
-                return Json(new
+                return StatusCode(500, new
                 {
                     status = "error",
                     message = ex.Message,
@@ -50,22 +58,26 @@ namespace TravelCompanyAPI.Controllers
         }
 
         [HttpPost("booking/new")]
-        public async Task<JsonResult> MakeBooking([FromBody] BookingRequest bookingRequest)
+        [SwaggerOperation(Summary = "Create a new booking", Description = "Create a new booking with the provided booking request details.")]
+        [SwaggerResponse(200, "Booking created successfully", typeof(Booking))]
+        [SwaggerResponse(400, "Invalid input parameters")]
+        [SwaggerResponse(500, "Internal server error")]
+        public async Task<IActionResult> MakeBooking([FromBody] BookingRequest bookingRequest)
         {
             try
             {
-                if (bookingRequest.CheckIn >= bookingRequest.CheckOut) throw new InvalidDataException("CheckIn date must be after CheckOut date.");
+                if (bookingRequest.CheckIn >= bookingRequest.CheckOut) return BadRequest("CheckIn date must be after CheckOut date.");
 
                 if (string.IsNullOrEmpty(bookingRequest.EmergencyContactName) || string.IsNullOrEmpty(bookingRequest.EmergencyContactPhone))
-                    throw new InvalidDataException("The emergency contact information is mandatory.");
+                    return BadRequest("The emergency contact information is mandatory.");
 
                 List<Room> rooms = await _roomService.GetRoomsListById(bookingRequest.RoomIds);
                 if (rooms.Count != bookingRequest.RoomIds.Count) throw new InvalidDataException($"The room's Id {string.Join(", ", bookingRequest.RoomIds.Where(x => rooms.Select(r => r.Id).Contains(x)))} has not been found");
 
-                if (rooms.TrueForAll(x => !x.Available)) throw new InvalidDataException("None of the selected rooms are available.");
+                if (rooms.TrueForAll(x => !x.Available)) return BadRequest("None of the selected rooms are available.");
 
                 bool isHotelAvailable = await _bookingService.IsHotelAvailable(bookingRequest.CheckIn, bookingRequest.CheckOut, rooms.FirstOrDefault().HotelId);
-                if (!isHotelAvailable) throw new InvalidDataException("The select hotel is not available for the selected dates.");
+                if (!isHotelAvailable) return BadRequest("The select hotel is not available for the selected dates.");
 
                 Booking newBooking = await _bookingService.AddReturn(new Booking
                 {
@@ -101,7 +113,7 @@ namespace TravelCompanyAPI.Controllers
                     await NotifyCustomer(guest, stringBuilder.ToString());
                 }
 
-                return Json(new
+                return Ok(new
                 {
                     status = "ok",
                     message = "Booking done.",
@@ -109,7 +121,7 @@ namespace TravelCompanyAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new
+                return StatusCode(500, new
                 {
                     status = "error",
                     message = ex.Message,
