@@ -13,7 +13,11 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "TravelCompanyAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new() { 
+        Title = "TravelCompanyAPI", 
+        Version = "v1", 
+        Description = "API to manage a travel agency. In it you can interact as a customer with hotel search and booking creation. As an administrator you can search for hotels, rooms and reservations, as well as create and edit them."
+    });
     c.EnableAnnotations();
 });
 
