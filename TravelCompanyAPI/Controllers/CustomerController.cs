@@ -6,6 +6,7 @@ using TravelCompany.Application.Helper;
 using TravelCompany.Application.Contracts;
 using System.Globalization;
 using System.Text;
+using TravelCompany.Domain.Entities.Enum;
 
 namespace TravelCompanyAPI.Controllers
 {
@@ -40,6 +41,8 @@ namespace TravelCompanyAPI.Controllers
             try
             {
                 if(guest == 0) return BadRequest("Guests must be greater than 0.");
+                List<string> cities = await _hotelService.GetAllCities();
+                if (!cities.Contains(city)) return BadRequest("We do not have hotels in the city you are looking for.");
                 DateOnly checkInDate = DateOnly.Parse(checkIn, CultureInfo.InvariantCulture);
                 DateOnly checkOutDate = DateOnly.Parse(checkOut, CultureInfo.InvariantCulture);
                 if(checkInDate < DateOnly.FromDateTime(DateTime.Now)) return BadRequest("CheckIn date must be after today.");
@@ -58,7 +61,16 @@ namespace TravelCompanyAPI.Controllers
         }
 
         [HttpPost("booking/new")]
-        [SwaggerOperation(Summary = "Create a new booking", Description = "Create a new booking with the provided booking request details.")]
+        [SwaggerOperation(Summary = "Create a new booking", Description = $"Create a new booking with the provided booking request details.\t\n" +
+            $"Enums help: \t\n" +
+            $"Gender: \t\n" +
+            $"0 = {nameof(Gender.Male)}\t\n" +
+            $"1 = {nameof(Gender.Female)}\t\n" +
+            $"2 = {nameof(Gender.Other)}\t\n" +
+            $"IdentityType: \t\n" +
+            $"0 = {nameof(IdentityType.DNI)}\t\n" +
+            $"1 = {nameof(IdentityType.CC)}\t\n" +
+            $"2 = {nameof(IdentityType.Passport)}\t\n")]
         [SwaggerResponse(200, "Booking created successfully", typeof(Booking))]
         [SwaggerResponse(400, "Invalid input parameters")]
         [SwaggerResponse(500, "Internal server error")]

@@ -2,6 +2,7 @@
 using Swashbuckle.AspNetCore.Annotations;
 using TravelCompany.Application.Service;
 using TravelCompany.Domain.Entities.DB;
+using TravelCompany.Domain.Entities.Enum;
 
 namespace TravelCompanyAPI.Controllers
 {
@@ -72,7 +73,7 @@ namespace TravelCompanyAPI.Controllers
             try
             {
                 var booking = await _bookingService.GetFullBookingById(id);
-                if(booking == null) return NotFound("Booking not found");
+                if (booking == null) return NotFound("Booking not found");
                 return Ok(booking);
             }
             catch (Exception ex)
@@ -94,7 +95,7 @@ namespace TravelCompanyAPI.Controllers
         {
             try
             {
-                if(!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid) return BadRequest(ModelState);
                 await _hotelService.CreateHotel(hotel);
                 return Ok(hotel);
             }
@@ -153,7 +154,17 @@ namespace TravelCompanyAPI.Controllers
         }
 
         [HttpPost("room/create")]
-        [SwaggerOperation(Summary = "Create a new room", Description = "Create a new room with the provided details.")]
+        [SwaggerOperation(Summary = "Create a new room", Description = $"Create a new room with the provided details.\t\n" +
+            $"Enums help: \t\n" +
+            $"RoomTypeId: \t\n" +
+            $"1 = {nameof(RoomType.Junior)}\t\n" +
+            $"2 = {nameof(RoomType.Double)}\t\n" +
+            $"3 = {nameof(RoomType.Triple)}\t\n" +
+            $"4 = {nameof(RoomType.Executive)}\t\n" +
+            $"CurrencyCode: \t\n" +
+            $"0 = {nameof(Currency.COP)}\t\n" +
+            $"1 = {nameof(Currency.EUR)}\t\n" +
+            $"2 = {nameof(Currency.USD)}\t\n")]
         [SwaggerResponse(200, "Room created successfully", typeof(Room))]
         [SwaggerResponse(400, "Invalid input parameters")]
         [SwaggerResponse(500, "Internal server error")]
@@ -176,7 +187,17 @@ namespace TravelCompanyAPI.Controllers
         }
 
         [HttpPost("room/edit")]
-        [SwaggerOperation(Summary = "Edit an existing room", Description = "Edit the details of an existing room.")]
+        [SwaggerOperation(Summary = "Edit an existing room", Description = "Edit the details of an existing room.\t\n" +
+            $"Enums help: \t\n" +
+            $"RoomTypeId: \t\n" +
+            $"1 = {nameof(RoomType.Junior)}\t\n" +
+            $"2 = {nameof(RoomType.Double)}\t\n" +
+            $"3 = {nameof(RoomType.Triple)}\t\n" +
+            $"4 = {nameof(RoomType.Executive)}\t\n" +
+            $"CurrencyCode: \t\n" +
+            $"0 = {nameof(Currency.COP)}\t\n" +
+            $"1 = {nameof(Currency.EUR)}\t\n" +
+            $"2 = {nameof(Currency.USD)}\t\n")]
         [SwaggerResponse(200, "Room edited successfully", typeof(Room))]
         [SwaggerResponse(400, "Invalid input parameters")]
         [SwaggerResponse(500, "Internal server error")]
@@ -200,7 +221,17 @@ namespace TravelCompanyAPI.Controllers
         }
 
         [HttpPost("hotel/addRoom")]
-        [SwaggerOperation(Summary = "Add rooms to a hotel", Description = "Add a list of rooms to a specific hotel.")]
+        [SwaggerOperation(Summary = "Add rooms to a hotel", Description = "Add a list of rooms to a specific hotel.\t\n" +
+            $"Enums help: \t\n" +
+            $"RoomTypeId: \t\n" +
+            $"1 = {nameof(RoomType.Junior)}\t\n" +
+            $"2 = {nameof(RoomType.Double)}\t\n" +
+            $"3 = {nameof(RoomType.Triple)}\t\n" +
+            $"4 = {nameof(RoomType.Executive)}\t\n" +
+            $"CurrencyCode: \t\n" +
+            $"0 = {nameof(Currency.COP)}\t\n" +
+            $"1 = {nameof(Currency.EUR)}\t\n" +
+            $"2 = {nameof(Currency.USD)}\t\n")]
         [SwaggerResponse(200, "Rooms added to hotel successfully", typeof(Hotel))]
         [SwaggerResponse(400, "Invalid input parameters")]
         [SwaggerResponse(404, "Hotel not found")]

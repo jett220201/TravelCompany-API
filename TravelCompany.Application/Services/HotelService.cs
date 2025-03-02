@@ -35,5 +35,11 @@ namespace TravelCompany.Application.Service
         {
             return await _hotelRepository.SearchHotels(checkIn, checkOut, guests, city);
         }
+
+        public async Task<List<string>> GetAllCities()
+        {
+            var hotels = await _hotelRepository.GetAll();
+            return hotels.Select(x => x.City).Distinct().ToList();
+        }
     }
 }
