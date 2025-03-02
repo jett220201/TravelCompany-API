@@ -32,7 +32,7 @@ namespace TravelCompanyAPI.Controllers
         }
         
         [HttpGet("search")]
-        [SwaggerOperation(Summary = "Search for hotels", Description = "Search for hotels based on check-in and check-out dates, number of guests, and city.")]
+        [SwaggerOperation(Summary = "Search for hotels", Description = "Search for hotels based on check-in and check-out dates, number of guests, and city. Date format: YYYY-MM-DD\t\n")]
         [SwaggerResponse(200, "Returns a list of hotels", typeof(List<Hotel>))]
         [SwaggerResponse(400, "Invalid input parameters")]
         [SwaggerResponse(500, "Internal server error")]
@@ -61,7 +61,7 @@ namespace TravelCompanyAPI.Controllers
         }
 
         [HttpPost("booking/new")]
-        [SwaggerOperation(Summary = "Create a new booking", Description = $"Create a new booking with the provided booking request details.\t\n" +
+        [SwaggerOperation(Summary = "Create a new booking", Description = $"Create a new booking with the provided booking request details.\t\n Date format: YYYY-MM-DD\t\n" +
             $"Enums help: \t\n" +
             $"Gender: \t\n" +
             $"0 = {nameof(Gender.Male)}\t\n" +
