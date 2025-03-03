@@ -13,6 +13,16 @@ namespace TravelCompany.Infraestructure.Repository
             _contextFactory = contextFactory;
         }
 
+        public async Task<List<Hotel>> GetAllHotels()
+        {
+            var context = await _contextFactory.CreateDbContextAsync();
+            var hotels = await context.Hotel
+                .Include(x => x.Rooms)
+                .Include(x => x.Bookings)
+                .ToListAsync();
+            return hotels;
+        }
+
         public async Task<List<Hotel>> SearchHotels(DateOnly checkIn, DateOnly checkOut, int guests, string city)
         {
             var context = await _contextFactory.CreateDbContextAsync();

@@ -18,6 +18,12 @@ namespace TravelCompany.Infraestructure.Repository
             return await context.Room.Include(x => x.Hotel).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<List<Room>> GetAllGeneralRooms()
+        {
+            var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Room.Include(x => x.Hotel).Include(x => x.BookingRoom).ToListAsync();
+        }
+
         public async Task<List<Room>> GetAllRooms(List<int> ids)
         {
             var context = await _contextFactory.CreateDbContextAsync();

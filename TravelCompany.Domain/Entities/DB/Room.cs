@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using TravelCompany.Domain.Entities.Enum;
 
 namespace TravelCompany.Domain.Entities.DB
@@ -19,7 +20,9 @@ namespace TravelCompany.Domain.Entities.DB
         public int Floor { get; set; }
         public bool Available { get; set; }
 
+        [JsonIgnore]
         public virtual Hotel? Hotel { get; set; }
+        [JsonIgnore]
         public virtual ICollection<BookingRoom>? BookingRoom { get; set; }
     }
 }

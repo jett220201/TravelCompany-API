@@ -18,7 +18,7 @@ namespace TravelCompany.Application.Service
 
         public async Task<List<Hotel>> GetAllHotels()
         {
-            return (List<Hotel>)await _hotelRepository.GetAll();
+            return await _hotelRepository.GetAllHotels();
         }
 
         public async Task<Hotel> GetById(int Id)

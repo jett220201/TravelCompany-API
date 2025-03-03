@@ -13,7 +13,7 @@ namespace TravelCompany.Application.Service
 
         public async Task<List<Room>> GetAllRooms()
         {
-            return (List<Room>)await _roomRepository.GetAll();
+            return await _roomRepository.GetAllGeneralRooms();
         }
 
         public async Task<int> CreateRoom(Room room)

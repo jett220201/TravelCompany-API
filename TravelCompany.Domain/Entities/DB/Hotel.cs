@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TravelCompany.Domain.Entities.DB
 {
@@ -14,7 +15,9 @@ namespace TravelCompany.Domain.Entities.DB
         public string City { get; set; } = string.Empty;
         public bool Available { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Room>? Rooms { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Booking>? Bookings { get; set; }
     }
 }
