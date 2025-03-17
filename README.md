@@ -7,8 +7,6 @@
 
 API for reservation and travel management, developed in **.NET** and deployed in **Railway** with SQL database deployed in **Azure**.
 
-This project is available on https://travelcompany-api-production.up.railway.app/swagger/index.html
-
 ## 🚀 Technologies Used
 - **.NET 8**
 - **Entity Framework Core**
