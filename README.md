@@ -17,8 +17,7 @@ API for reservation and travel management, developed in **.NET** and deployed in
 
 ## 📥 Getting Started
 These instructions will give you a give to install and run the
-project in your local machine. If you need a deployment give please
-check the Deployment section.
+project in your local machine.
 
 ### 📂 Project structure
 This project has the following structure:
@@ -110,15 +109,15 @@ cd TravelCompany-API
   }
 }
 ```
-4. Restore NuGet packages:
+3. Restore NuGet packages:
 ```sh
 dotnet restore
 ```
-6. Run project:
+4. Run project:
 ```sh
 dotnet run
 ```
-8. Open Swagger in http://localhost:{port}/swagger
+5. Open Swagger in http://localhost:{port}/swagger
 
 ## ⚙️ API architecture
 This project follows Clean Architecture principles, dividing the application into well-defined layers:
